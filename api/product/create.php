@@ -1,0 +1,31 @@
+<?php
+// include database and object file
+include_once '../config/database.php';
+include_once '../objects/product.php';
+ 
+// get database connection
+$database = new Database();
+$db = $database->getConnection();
+ 
+// instantiate product object
+$product = new Product($db);
+ 
+// get posted data
+$data = json_decode(file_get_contents("php://input"));
+ 
+// set product property values
+$product->name = $data->name;
+$product->price = $data->price;
+$product->description = $data->description;
+$product->created = date('Y-m-d H:i:s');
+ 
+// create the product
+if($product->create()){
+    echo "Product was created.";
+}
+ 
+// if unable to create the product, tell the user
+else{
+    echo "Unable to create product.";
+}
+?>
